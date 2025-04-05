@@ -1,21 +1,27 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
 
-use Cake\Http\Exception\BadRequestException;
-use Cake\Http\Exception\InternalErrorException;
+use App\Validation\VisitRequestValidator;
+use App\Error\Exception\ApiValidationException;
+use App\Service\VisitsService;
+use Cake\ORM\TableRegistry;
 
 /**
  * Visits Controller
  *
  * @property \App\Model\Table\VisitsTable $Visits
  */
-class VisitsController extends AppController
+class VisitsController extends ApiController
 {
+    protected VisitsService $VisitsService;
+
     public function initialize(): void
     {
         parent::initialize();
+        $this->VisitsService = new VisitsService();
         $this->loadComponent('RequestHandler');
     }
 
@@ -23,30 +29,32 @@ class VisitsController extends AppController
     {
         $this->request->allowMethod(['post']);
 
+        $data = $this->request->getData();
 
-        $this->set([
-            'success' => true,
-            'data' => ['message' => 'Deu tudo certo'],
-            '_serialize' => ['success', 'data'],
-        ]);
+        try {
+            // Validation
+            $validator = VisitRequestValidator::create();
+            $errors = $validator->validate($data);
 
-        // $visit = $this->Visits->newEmptyEntity();
+            if (!empty($errors)) {
+                throw new ApiValidationException('Erro na validação do body', $errors);
+            }
 
-        // $data = $this->request->getData();
-        // $visit = $this->Visits->patchEntity($visit, $data);
+            $visit = $this->VisitsService->createVisit($data);
 
-        // if ($visit->hasErrors()) {
-        //     throw new BadRequestException(json_encode($visit->getErrors()));
-        // }
-
-        // if (!$this->Visits->save($visit)) {
-        //     throw new InternalErrorException('Erro ao salvar a visita');
-        // }
-
-        // $this->set([
-        //     'success' => true,
-        //     'data' => $visit,
-        //     '_serialize' => ['success', 'data'],
-        // ]);
+            $this->set([
+                'message' => 'Visita criada com sucesso.',
+                'data' => $visit,
+                '_serialize' => ['message', 'data'],
+            ]);
+        } catch (ApiValidationException  $e) {
+            $this->response = $this->response->withStatus(422);
+            $this->viewBuilder()->setClassName('Json');
+            $this->set([
+                'message' => $e->getMessage(),
+                'errors' => $e->getErrors(),
+                '_serialize' => ['message', 'errors'],
+            ]);
+        }
     }
 }

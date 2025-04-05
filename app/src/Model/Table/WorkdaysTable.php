@@ -43,9 +43,10 @@ class WorkdaysTable extends Table
         $this->setTable('workdays');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
-
+        // Needed to change propertyName because therre is already a property named visits
         $this->hasMany('Visits', [
             'foreignKey' => 'workday_id',
+            'propertyName' => 'related_visits',
         ]);
 
         $this->addBehavior('Timestamp', [

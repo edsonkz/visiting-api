@@ -15,7 +15,10 @@ class CreateWorkdaysTable extends AbstractMigration
      */
     public function change(): void
     {
-        $table = $this->table('workdays');
+        $table = $this->table('workdays', [
+            'collation' => 'utf8mb4_unicode_ci',
+            'encoding' => 'utf8mb4',
+        ]);
 
         $table
             ->addColumn('date', 'date', ['null' => false])

@@ -93,11 +93,6 @@ class VisitsTable extends Table
             ->notEmptyString('products');
 
         $validator
-            ->integer('duration')
-            ->requirePresence('duration', 'create')
-            ->notEmptyString('duration');
-
-        $validator
             ->integer('address_id')
             ->notEmptyString('address_id');
 

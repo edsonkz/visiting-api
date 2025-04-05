@@ -99,8 +99,7 @@ class AddressesTable extends Table
 
         $validator
             ->scalar('complement')
-            ->maxLength('complement', 255)
-            ->notEmptyString('complement');
+            ->maxLength('complement', 255);
 
         return $validator;
     }

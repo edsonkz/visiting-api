@@ -15,14 +15,16 @@ class CreateVisitsTable extends AbstractMigration
      */
     public function change(): void
     {
-        $table = $this->table('visits');
+        $table = $this->table('visits', [
+            'collation' => 'utf8mb4_unicode_ci',
+            'encoding' => 'utf8mb4',
+        ]);
         $table
             ->addColumn('date', 'date', ['null' => false])
             ->addColumn('status', 'string', ['limit' => 50, 'null' => false])
             ->addColumn('completed', 'boolean', ['default' => false, 'null' => false])
             ->addColumn('forms', 'integer', ['null' => false])
             ->addColumn('products', 'integer', ['null' => false])
-            ->addColumn('duration', 'integer', ['null' => false])
             ->addColumn('address_id', 'integer', ['null' => false])
             ->addColumn('workday_id', 'integer', ['null' => false])
             ->addForeignKey('address_id', 'addresses', 'id', ['delete' => 'CASCADE', 'update' => 'NO_ACTION']) // 1-1 Relation with Addresses table
