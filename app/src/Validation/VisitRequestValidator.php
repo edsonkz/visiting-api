@@ -14,7 +14,7 @@ class VisitRequestValidator
     {
         $validator = new Validator();
 
-        // Campos de Visits
+        // Visits values
         $validator
             ->requirePresence('date', 'create', 'A data da visita é obrigatória.')
             ->notEmptyDate('date', 'A data da visita não pode estar vazia.')
@@ -37,7 +37,7 @@ class VisitRequestValidator
             ->integer('products', 'O campo products deve ser um número inteiro.')
             ->greaterThanOrEqual('products', 0, 'O campo products não pode ser negativo.');
 
-        // Campos de endereço (externos à entidade Visits)
+        // Address postal_code
         $validator
             ->requirePresence('postal_code', 'create', 'O CEP é obrigatório.')
             ->notEmptyString('postal_code', 'O CEP não pode estar vazio.')
@@ -57,6 +57,59 @@ class VisitRequestValidator
                 'rule' => ['custom', '/^[0-9]+$/'],
                 'message' => 'O número deve conter apenas dígitos'
             ]);
+
+        return $validator;
+    }
+
+    public static function findByDate()
+    {
+        $validator = new Validator();
+
+        $validator
+            ->requirePresence('date')
+            ->notEmptyString('date')
+            ->date('date', ['ymd'], 'A data deve estar no formato YYYY-MM-DD.');
+
+        return $validator;
+    }
+
+    public static function update()
+    {
+        $validator = new Validator();
+
+        $validator
+            ->requirePresence('id')
+            ->integer('id', 'O campo id deve ser um número inteiro.')
+            ->greaterThanOrEqual('id', 0, 'O campo id não pode ser negativo.');
+
+        $validator
+            ->notEmptyDate('date', 'A data da visita não pode estar vazia.')
+            ->add('date', 'validFormat', [
+                'rule' => ['date', ['ymd']],
+                'message' => 'Formato de data inválido. Use o padrão YYYY-MM-DD.'
+            ]);
+
+        $validator
+            ->notEmptyString('status', 'O status da visita não pode estar vazio.');
+
+        $validator
+            ->integer('forms', 'O campo forms deve ser um número inteiro.')
+            ->greaterThanOrEqual('forms', 0, 'O campo forms não pode ser negativo.');
+
+        $validator
+            ->integer('products', 'O campo products deve ser um número inteiro.')
+            ->greaterThanOrEqual('products', 0, 'O campo products não pode ser negativo.');
+
+        $validator->add('address', 'custom', [
+            'rule' => function ($value, $context) {
+                if (!is_array($value)) {
+                    return true;
+                }
+
+                return !empty($value['street_number']);
+            },
+            'message' => 'O campo street_number é obrigatório quando address é enviado.'
+        ]);
 
         return $validator;
     }

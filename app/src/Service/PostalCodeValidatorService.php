@@ -2,16 +2,22 @@
 
 namespace App\Service;
 
-use Normalizer;
 use Cake\Http\Client;
 use App\Error\Exception\ApiValidationException;
+use App\Utility\TextNormalizer;
 
 class PostalCodeValidatorService
 {
     protected Client $http;
+
     public function __construct()
     {
         $this->http = new Client();
+    }
+
+    protected function normalizeText(string $text): string
+    {
+        return TextNormalizer::normalize($text);
     }
 
     public function validateAndFetchAddress(array $postData): array
@@ -39,21 +45,6 @@ class PostalCodeValidatorService
         $data['street_number'] = $postData['street_number'];
 
         return $data;
-    }
-
-    // Normalize República Virtual texts
-    protected function normalizeText(string $text): string
-    {
-        // Remove whitespaces (NBSP, etc.)
-        $text = preg_replace('/[\x{00A0}\x{1680}\x{180E}\x{2000}-\x{200A}\x{202F}\x{205F}\x{3000}\x{FEFF}]/u', ' ', $text);
-
-        // Normilize accentuation
-        $text = mb_convert_encoding($text, 'UTF-8', 'ISO-8859-1');
-
-        // Remove double spaces and trim the string
-        $text = preg_replace('/\s+/', ' ', $text);
-
-        return trim($text);
     }
 
     // Search postal_code on Republica Virutal
@@ -111,5 +102,4 @@ class PostalCodeValidatorService
             'state' => $this->normalizeText($json['uf'] ?? ''),
         ];
     }
-
 }

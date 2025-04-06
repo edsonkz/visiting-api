@@ -81,5 +81,41 @@ return static function (RouteBuilder $routes) {
 
         // Visits creation route (POST /api/visits)
         $builder->connect('/visits', ['controller' => 'Visits', 'action' => 'add', '_method' => 'POST']);
+        // Visits find by Date (GET /api/visits)
+        $builder->connect('/visits/:date', [
+            'controller' => 'Visits',
+            'action' => 'findByDate',
+            '_method' => 'GET'
+        ], [
+            'pass' => ['date'],
+            'patterns' => ['date' => '\d{4}-\d{2}-\d{2}'],
+        ]);
+        // Visits edit (PUT /api/visits/:id)
+        $builder->connect(
+            '/visits/:id',
+            [
+                'controller' => 'Visits',
+                'action' => 'update',
+                '_method' => 'PUT'
+            ],
+            [
+                'pass' => ['id'],
+            ]
+        );
+
+        // Workdays find all (GET /api/workdays)
+        $builder->connect('/workdays', ['controller' => 'Workdays', 'action' => 'findAll', '_method' => 'GET']);
+        // Workdays close visits (PUT /api/workdays/:date/close)
+        $builder->connect(
+            '/workdays/:date/close',
+            [
+                'controller' => 'Workdays',
+                'action' => 'close',
+                '_method' => 'PUT'
+            ],
+            [
+                'pass' => ['date'],
+            ]
+        );
     });
 };

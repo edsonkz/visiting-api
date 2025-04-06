@@ -27,7 +27,7 @@ class CreateVisitsTable extends AbstractMigration
             ->addColumn('products', 'integer', ['null' => false])
             ->addColumn('address_id', 'integer', ['null' => false])
             ->addColumn('workday_id', 'integer', ['null' => false])
-            ->addForeignKey('address_id', 'addresses', 'id', ['delete' => 'CASCADE', 'update' => 'NO_ACTION']) // 1-1 Relation with Addresses table
+            ->addForeignKey('address_id', 'addresses', 'id', ['delete' => 'NO_ACTION', 'update' => 'NO_ACTION']) // 1-1 Relation with Addresses table
             ->addForeignKey('workday_id', 'workdays', 'id', ['delete' => 'CASCADE', 'update' => 'NO_ACTION']) // N-1 Relation with Workdays table
             ->addTimestamps()
             ->create();
