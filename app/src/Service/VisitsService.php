@@ -123,8 +123,16 @@ class VisitsService
 
             $address = null;
             $oldAddressId = $visit->address_id;
-            // Delete existing Address
+            // Create ne address if data received
             if (!empty($data['address'])) {
+                // Use old postal_code if not given
+                if (!isset($data['address']['postal_code'])) {
+                    $data['address']['postal_code'] = $visit->address->postal_code;
+                }
+                // Use old street_number if not given
+                if (!isset($data['address']['street_number'])) {
+                    $data['address']['street_number'] = $visit->address->street_number;
+                }
                 // Validate postal_code and create an Address if correct
                 $addressData = $this->PostalCodeValidator->validateAndFetchAddress(
                     $data['address']
