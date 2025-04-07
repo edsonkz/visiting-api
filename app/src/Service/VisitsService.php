@@ -105,7 +105,7 @@ class VisitsService
 
     public function findByDate(string $date)
     {
-        $visits = $this->Visits->find()->where(['date' => $date])->all();
+        $visits = $this->Visits->find()->contain(['Addresses'])->where(['date' => $date])->all();
 
         return $visits;
     }
