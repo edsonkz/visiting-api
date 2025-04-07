@@ -44,6 +44,7 @@ class WorkdaysService
             // Convert to iterator array
             $remainingVisits = iterator_to_array($visits);
             $currentDate = $this->getNextWorkdayDate($date);
+            $showVisits = [];
 
             while (!empty($remainingVisits)) {
                 // Seach next workday
@@ -73,6 +74,7 @@ class WorkdaysService
                     }
 
                     $this->Visits->saveMany($remainingVisits);
+                    $showVisits = $remainingVisits;
                     break;
                 }
 
@@ -95,6 +97,7 @@ class WorkdaysService
                     $availableMinutes -= $duration;
                     $totalUsed += $duration;
 
+                    $showVisits[] = $remainingVisits[$i];
                     unset($remainingVisits[$i]);
                 }
 
@@ -107,6 +110,7 @@ class WorkdaysService
             }
 
             $this->updateWorkdayStats($date);
+            return $showVisits;
         });
     }
 

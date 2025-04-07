@@ -58,12 +58,11 @@ class WorkdaysController extends ApiController
                 throw new ApiValidationException('Erro na validação da data', $errors);
             }
 
-            $newDate = $this->WorkdaysService->close($date);
+            $changedVisits = $this->WorkdaysService->close($date);
 
             $this->set([
-                'message' => "Visitas realocados para o dia $newDate!",
-                'newDate' => $newDate,
-                '_serialize' => ['visits', 'newDate'],
+                'changedVisits' => $changedVisits,
+                '_serialize' => ['visits', 'changedVisits'],
             ]);
 
         } catch (ApiValidationException  $e) {
