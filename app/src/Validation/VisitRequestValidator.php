@@ -100,17 +100,6 @@ class VisitRequestValidator
             ->integer('products', 'O campo products deve ser um número inteiro.')
             ->greaterThanOrEqual('products', 0, 'O campo products não pode ser negativo.');
 
-        $validator->add('address', 'custom', [
-            'rule' => function ($value, $context) {
-                if (!is_array($value)) {
-                    return true;
-                }
-
-                return !empty($value['street_number']);
-            },
-            'message' => 'O campo street_number é obrigatório quando address é enviado.'
-        ]);
-
         return $validator;
     }
 }
