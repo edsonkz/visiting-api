@@ -41,13 +41,14 @@ class VisitsController extends ApiController
 
             $visit = $this->VisitsService->create($data);
 
+            $this->response = $this->response->withStatus(201);
             $this->set([
                 'message' => 'Visita criada com sucesso.',
                 'data' => $visit,
                 '_serialize' => ['message', 'data'],
             ]);
         } catch (ApiValidationException  $e) {
-            $this->response = $this->response->withStatus(422);
+            $this->response = $this->response->withStatus($e->getCode());
             $this->viewBuilder()->setClassName('Json');
             $this->set([
                 'message' => $e->getMessage(),
@@ -78,7 +79,7 @@ class VisitsController extends ApiController
             ]);
 
         } catch (ApiValidationException  $e) {
-            $this->response = $this->response->withStatus(422);
+            $this->response = $this->response->withStatus($e->getCode());
             $this->viewBuilder()->setClassName('Json');
             $this->set([
                 'message' => $e->getMessage(),
@@ -112,7 +113,7 @@ class VisitsController extends ApiController
                 '_serialize' => ['message', 'visit'],
             ]);
         } catch (ApiValidationException  $e) {
-            $this->response = $this->response->withStatus(422);
+            $this->response = $this->response->withStatus($e->getCode());
             $this->viewBuilder()->setClassName('Json');
             $this->set([
                 'message' => $e->getMessage(),

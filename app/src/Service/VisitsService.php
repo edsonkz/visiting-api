@@ -46,7 +46,7 @@ class VisitsService
 
             $address = $this->Addresses->newEntity($addressData);
             if ($address->getErrors()) {
-                throw new ApiValidationException('Erro ao criar endereço', $address->getErrors());
+                throw new ApiValidationException('Erro ao criar endereço', $address->getErrors(), 400);
             }
             $this->Addresses->saveOrFail($address);
 
@@ -59,7 +59,7 @@ class VisitsService
 
             if (!$existingWorkday) {
                 if ($duration > 480) {
-                    throw new ApiValidationException('A duração total excede o limite de 8 horas.');
+                    throw new ApiValidationException('Limite de horas atingido', [], 400);
                 }
 
                 $workday = $this->Workdays->newEntity([
@@ -73,7 +73,7 @@ class VisitsService
                 $workday = $existingWorkday;
 
                 if ($workday->duration + $duration > 480) {
-                    throw new ApiValidationException('A duração total excede o limite de 8 horas.');
+                    throw new ApiValidationException('Limite de horas atingido', [], 400);
                 }
 
                 $workday->visits += 1;
@@ -118,7 +118,7 @@ class VisitsService
             // Check if the id is valid
             $visit = $this->Visits->find()->contain(['Addresses', 'Workdays'])->where(['Visits.id' => $id])->first();
             if (!$visit) {
-                throw new ApiValidationException('Visita não encontrada com esse id');
+                throw new ApiValidationException('Visita não encontrada com esse id', [], 400);
             }
 
             $address = null;
@@ -140,7 +140,7 @@ class VisitsService
 
                 $address = $this->Addresses->newEntity($addressData);
                 if ($address->getErrors()) {
-                    throw new ApiValidationException('Erro ao criar endereço', $address->getErrors());
+                    throw new ApiValidationException('Erro ao criar endereço', $address->getErrors(), 400);
                 }
                 $this->Addresses->saveOrFail($address);
             }
@@ -176,7 +176,7 @@ class VisitsService
 
                 if (!$existingWorkday) {
                     if ($duration > 480) {
-                        throw new ApiValidationException('A duração total excede o limite de 8 horas.');
+                        throw new ApiValidationException('Limite de horas atingido', [], 400);
                     }
 
                     $workday = $this->Workdays->newEntity([
@@ -190,7 +190,7 @@ class VisitsService
                     $workday = $existingWorkday;
 
                     if ($workday->duration + $duration > 480) {
-                        throw new ApiValidationException('A duração total excede o limite de 8 horas.');
+                        throw new ApiValidationException('Limite de horas atingido', [], 400);
                     }
 
                     $workday->visits += 1;
@@ -215,7 +215,7 @@ class VisitsService
                     $workday->duration += $actual_duration;
 
                     if ($workday->duration > 480) {
-                        throw new ApiValidationException('A duração total excede o limite de 8 horas.');
+                        throw new ApiValidationException('Limite de horas atingido', [], 400);
                     }
                 }
 
