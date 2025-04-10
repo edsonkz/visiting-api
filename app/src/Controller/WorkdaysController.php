@@ -36,7 +36,7 @@ class WorkdaysController extends ApiController
                 '_serialize' => ['workdays'],
             ]);
         } catch (ApiValidationException  $e) {
-            $this->response = $this->response->withStatus(422);
+            $this->response = $this->response->withStatus($e->getCode());
             $this->viewBuilder()->setClassName('Json');
             $this->set([
                 'message' => $e->getMessage(),
@@ -66,7 +66,7 @@ class WorkdaysController extends ApiController
             ]);
 
         } catch (ApiValidationException  $e) {
-            $this->response = $this->response->withStatus(422);
+            $this->response = $this->response->withStatus($e->getCode());
             $this->viewBuilder()->setClassName('Json');
             $this->set([
                 'message' => $e->getMessage(),

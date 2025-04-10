@@ -50,7 +50,7 @@ class VisitRequestValidator
         $validator->allowEmptyString('sublocality');
         $validator->allowEmptyString('complement');
         $validator
-            ->requirePresence('street_number', 'create')
+            ->requirePresence('street_number', 'create', 'O número é obrigatório')
             ->notEmptyString('street_number', 'O número é obrigatório')
             ->maxLength('street_number', 10, 'O número deve ter no máximo 10 caracteres')
             ->add('street_number', 'validFormat', [

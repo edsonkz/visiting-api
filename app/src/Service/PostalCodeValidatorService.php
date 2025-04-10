@@ -32,7 +32,7 @@ class PostalCodeValidatorService
         }
 
         if (!$data) {
-            throw new ApiValidationException('CEP não encontrado');
+            throw new ApiValidationException('CEP não encontrado', [], 404);
         }
 
         // Prioritze user inserted values

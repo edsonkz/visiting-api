@@ -35,7 +35,7 @@ class ErrorController extends ApiController
         $exception = $this->getRequest()->getAttribute('cakephp.exception');
 
         if ($exception instanceof ApiValidationException) {
-            $this->response = $this->response->withStatus(422);
+            $this->response = $this->response->withStatus($e->getCode());
             $this->viewBuilder()->setClassName('Json');
             $this->set([
                 'message' => $exception->getMessage(),

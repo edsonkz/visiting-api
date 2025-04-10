@@ -1,0 +1,611 @@
+type: collection.insomnia.rest/5.0
+name: Mundowap-test-php
+meta:
+  id: wrk_a9387827a57b43f6a1428f9126a8edb0
+  created: 1743814941585
+  modified: 1743814941585
+collection:
+  - name: Visits
+    meta:
+      id: fld_4f969a4a66984c7fa4a56dfc953dac75
+      created: 1743947708190
+      modified: 1743947708190
+      sortKey: -1743947708190
+    children:
+      - url: "{{ _.baseUrl }}/api/visits"
+        name: Create Visits
+        meta:
+          id: req_390c344468b54ba6bcc9de5d30f2d3ba
+          created: 1743814995173
+          modified: 1744244616945
+          isPrivate: false
+          description: >
+            ### 📝 Create Visit
+
+
+            **POST** `/api/visits`
+
+
+            Creates a new visit in the system. The visit will be automatically assigned to a workday based on the provided date and calculated duration. If no workday exists for the given date, a new one will be created.
+
+
+            ---
+
+
+            #### 📥 Request Body (JSON)
+
+
+            **Required fields:**
+
+
+            | Field           | Type      | Description                                                   |
+
+            |------------------|-----------|---------------------------------------------------------------|
+
+            | `date`           | `string`  | Visit date in `YYYY-MM-DD` format.                           |
+
+            | `status`         | `string`  | Visit status (e.g. `"Não conclusivo"`).                      |
+
+            | `forms`          | `integer` | Number of filled forms.                                      |
+
+            | `products`       | `integer` | Number of products shown.                                    |
+
+            | `postal_code`    | `string`  | Brazilian postal code, e.g. `"64007615"`.                    |
+
+            | `street_number`  | `string`  | Address street number.                                       |
+
+
+            **Optional fields:**
+
+
+            | Field           | Type      | Description                                                   |
+
+            |------------------|-----------|---------------------------------------------------------------|
+
+            | `completed`      | `boolean` | Defines whether the visit is completed.                      |
+
+            | `sublocality`    | `string`  | Neighborhood/locality of the visit.                          |
+
+            | `complement`     | `string`  | Address complement.                                          |
+
+            | `street`         | `string`  | Street name.                                                 |
+
+
+            ---
+
+
+            #### ✅ Success Response
+
+
+            - **Status:** `201 Created`
+
+            - **Content-Type:** `application/json`
+
+
+            ```json
+
+            {
+              "message": "Visita criada com sucesso.",
+              "data": {
+                "date": "2025-07-20",
+                "forms": 7,
+                "products": 8,
+                "status": "Não conclusivo",
+                "address_id": 5,
+                "workday_id": 1,
+                "completed": true,
+                "id": 5
+              }
+            }
+
+            ```
+
+
+            ---
+
+
+            #### ⚠️ Possible Errors
+
+
+            ##### 422 Unprocessable Entity
+
+
+            This error occurs when a required field is missing or invalid.
+
+
+            ```json
+
+            {
+              "message": "Erro de validação",
+              "errors": {
+                "date": ["Este campo é obrigatório"],
+                "postal_code": ["Formato de CEP inválido"]
+              }
+            }
+
+            ```
+
+
+            ##### 400 Bad Request
+
+
+            This error occurs when the workday has reached the maximum allowed total duration of 480 minutes.
+
+
+            ```json
+
+            {
+              "message": "Limite de horas atingido",
+              "errors": []
+            }
+
+            ```
+
+
+            ##### 404 Not Found
+
+
+            This error occurs when the provided postal code cannot be resolved into a valid address.
+
+
+            ```json
+
+            {
+              "message": "CEP não encontrado",
+              "errors": []
+            }
+
+            ```
+          sortKey: -1743947729916
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"date": "2025-07-20",
+            	"status": "Não conclusivo",
+            	"forms": 7,
+            	"products": 8,
+            	"completed": true,
+            	"postal_code": "64007615",
+            	"street_number": "15"
+            }
+        parameters:
+          - id: pair_4808a28c76f440fe9345a4a7feed5182
+            disabled: false
+          - id: pair_940281b883934c7699c74de3b95e779d
+            disabled: true
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.3.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/visits/2025-07-21"
+        name: Find By Date Visits
+        meta:
+          id: req_483c5e4cdbc045008946325630f50901
+          created: 1743947674647
+          modified: 1744243966491
+          isPrivate: false
+          description: >
+            ### 📆 Find Visits By Date
+
+
+            **GET** `/api/visits/:date`
+
+
+            Fetches all visits scheduled for a specific date. Each visit includes its associated address data.
+
+
+            ---
+
+
+            #### 🔄 Response
+
+
+            - **Status:** `200 OK`  
+
+            - **Content-Type:** `application/json`
+
+
+            ```json
+
+            {
+              "visits": [
+                {
+                  "id": 4,
+                  "date": "2025-07-21",
+                  "status": "Não Finalizado",
+                  "completed": false,
+                  "forms": 10,
+                  "products": 3,
+                  "address_id": 4,
+                  "workday_id": 14,
+                  "created_at": "2025-04-07T00:10:20+00:00",
+                  "updated_at": "2025-04-07T00:11:42+00:00",
+                  "address": {
+                    "id": 4,
+                    "postal_code": "64007-615",
+                    "state": "PI",
+                    "city": "Teresina",
+                    "sublocality": "Real Copagri",
+                    "street": "Residencial Socorro Monte",
+                    "street_number": "15",
+                    "complement": "",
+                    "created_at": "2025-04-07T00:10:20+00:00",
+                    "updated_at": null
+                  }
+                },
+                {
+                  "id": 5,
+                  "date": "2025-07-21",
+                  "status": "Não conclusivo",
+                  "completed": false,
+                  "forms": 7,
+                  "products": 8,
+                  "address_id": 13,
+                  "workday_id": 14,
+                  "created_at": "2025-04-07T00:10:43+00:00",
+                  "updated_at": "2025-04-09T23:52:59+00:00",
+                  "address": {
+                    "id": 13,
+                    "postal_code": "53429-640",
+                    "state": "PE",
+                    "city": "Paulista",
+                    "sublocality": "Nossa Senhora do Ó",
+                    "street": "Rua Gipson",
+                    "street_number": "11",
+                    "complement": "",
+                    "created_at": "2025-04-09T23:52:59+00:00",
+                    "updated_at": null
+                  }
+                }
+              ]
+            }
+          sortKey: -1743947729816
+        method: GET
+        parameters:
+          - id: pair_21bb0e4f32fa4830a133ed5f2e151407
+            disabled: false
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/visits/5"
+        name: Update Visit
+        meta:
+          id: req_f26dad7f890c44bd902e724547249161
+          created: 1743949157961
+          modified: 1744244695526
+          isPrivate: false
+          description: >+
+            ### 🔄 Update a Visit
+
+
+            **PUT** `/api/visits/:visitId`
+
+
+            This route updates a specific visit. All fields can be edited, including the nested address object. However, `city` and `state` are automatically updated based on the `postal_code`, and **should not be manually changed**.
+
+
+            The visit is also subject to daily time limit validation — the total minutes of all visits on the same day cannot exceed 480 minutes.
+
+
+            ---
+
+
+            #### 📥 Request Body Fields
+
+
+            | Field              | Type     | Required | Description                                                                 |
+
+            |-------------------|----------|----------|-----------------------------------------------------------------------------|
+
+            | `date`            | string   | No       | New date of the visit (`YYYY-MM-DD`)                                       |
+
+            | `status`          | string   | No       | Visit status. Example: `"Concluded"`                                       |
+
+            | `forms`           | number   | No       | Number of forms used in the visit                                          |
+
+            | `products`        | number   | No       | Number of products used in the visit                                       |
+
+            | `address`         | object   | No       | Address data. All subfields are optional except `postal_code`              |
+
+            | `address.postal_code` | string | Yes (if updating address) | Used to automatically fetch `state` and `city`             |
+
+            | `address.sublocality`| string | No       | Neighborhood or region                                                     |
+
+            | `address.street`  | string   | No       | Street name                                                                |
+
+            | `address.street_number` | string | No   | Street number                                                              |
+
+            | `address.complement`  | string | No     | Address complement (e.g., Apt, Block)                                      |
+
+
+            ---
+
+
+            #### ✅ Example
+
+
+            ```json
+
+            {
+              "date": "2025-07-22",
+              "status": "Concluded",
+              "forms": 8,
+              "products": 4,
+              "address": {
+                "postal_code": "12345-678",
+                "sublocality": "Downtown",
+                "street": "Main Street",
+                "street_number": "101",
+                "complement": "Apartment 5"
+              }
+            }
+
+
+            ```
+
+            #### ⚠️ Possible Errors
+
+
+            ##### 422 Unprocessable Entity
+
+
+            This error occurs when a required field is missing or invalid.
+
+
+            ```json
+
+            {
+              "message": "Erro de validação",
+              "errors": {
+                "date": ["Este campo é obrigatório"],
+                "postal_code": ["Formato de CEP inválido"]
+              }
+            }
+
+            ```
+
+
+            ##### 400 Bad Request
+
+
+            This error occurs when the workday has reached the maximum allowed total duration of 480 minutes.
+
+
+            ```json
+
+            {
+              "message": "Limite de horas atingido",
+              "errors": []
+            }
+
+            ```
+
+
+            ##### 404 Not Found
+
+
+            This error occurs when the provided postal code cannot be resolved into a valid address.
+
+
+            ```json
+
+            {
+              "message": "CEP não encontrado",
+              "errors": []
+            }
+
+            ```
+
+          sortKey: -1743947729716
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"address": {
+            		"postal_code": "53429640"
+            	}
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Workdays
+    meta:
+      id: fld_b8a358b46e9341558f895d78fe4e8701
+      created: 1743947716033
+      modified: 1743947716033
+      sortKey: -1743947716033
+    children:
+      - url: "{{ _.baseUrl }}/api/workdays"
+        name: Find All Workdays
+        meta:
+          id: req_e9032d889918473aa8204628ee475cad
+          created: 1743946533524
+          modified: 1744243711230
+          isPrivate: false
+          description: >
+            ### 📅 Find All Workdays
+
+
+            **GET** `/api/workdays`
+
+
+            Returns all registered workdays in the system. Each item represents a working day and includes:
+
+
+            - The date (`date`)
+
+            - The total number of visits for the day (`visits`)
+
+            - How many of those visits were completed (`completed`)
+
+            - The total duration of the visits in minutes (`duration`)
+
+            - Creation and update timestamps (`created_at`, `updated_at`)
+
+
+            ---
+
+
+            #### 🔄 Response
+
+
+            - **Status:** `200 OK`
+
+            - **Content-Type:** `application/json`
+
+
+            ```json
+
+            {
+              "workdays": [
+                {
+                  "id": 1,
+                  "date": "2025-07-20",
+                  "visits": 1,
+                  "completed": 1,
+                  "duration": 45,
+                  "created_at": "2025-04-06T18:19:38+00:00",
+                  "updated_at": "2025-04-07T00:11:42+00:00"
+                },
+                {
+                  "id": 14,
+                  "date": "2025-07-21",
+                  "visits": 2,
+                  "completed": 0,
+                  "duration": 310,
+                  "created_at": "2025-04-06T18:34:19+00:00",
+                  "updated_at": "2025-04-07T00:11:42+00:00"
+                }
+              ]
+            }
+          sortKey: -1743947719073
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/workdays/2025-07-20/close"
+        name: Close Visits to next Workday
+        meta:
+          id: req_206326c515bb458f9fcf41b770fab952
+          created: 1743960615982
+          modified: 1744244899207
+          isPrivate: false
+          description: >-
+            ### 🔒 Close Visits to Next Workday
+
+
+            **PUT** `/api/workdays/:date/close`
+
+
+            This route is responsible for moving all **incomplete visits** (`completed: false`) from the specified workday (`:date`) to the next available workday(s), respecting the maximum allowed total duration of **480 minutes per day**.
+
+
+            ---
+
+
+            #### 🔄 Response
+
+
+            - **Status:** `200 OK`
+
+            - **Content-Type:** `application/json`
+
+
+            ```json
+
+            {
+            	"changedVisits": [
+            		{
+            			"id": 4,
+            			"date": "2025-07-21",
+            			"status": "Não Finalizado",
+            			"completed": false,
+            			"forms": 10,
+            			"products": 3,
+            			"address_id": 4,
+            			"workday_id": 14,
+            			"created_at": "2025-04-07T00:10:20+00:00",
+            			"updated_at": "2025-04-07T00:11:26+00:00"
+            		},
+            		{
+            			"id": 5,
+            			"date": "2025-07-21",
+            			"status": "Não conclusivo",
+            			"completed": false,
+            			"forms": 7,
+            			"products": 8,
+            			"address_id": 5,
+            			"workday_id": 14,
+            			"created_at": "2025-04-07T00:10:43+00:00",
+            			"updated_at": "2025-04-07T00:11:29+00:00"
+            		}
+            	]
+            }
+
+            ```
+          sortKey: -1743947718973
+        method: PUT
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.2
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_d6d089d308214cf6035e27cc77aadf6ea2e6aa55
+    created: 1743814941587
+    modified: 1743814941587
+environments:
+  name: Base Environment
+  meta:
+    id: env_d6d089d308214cf6035e27cc77aadf6ea2e6aa55
+    created: 1743814941586
+    modified: 1743814988705
+    isPrivate: false
+  data:
+    baseUrl: http://localhost:13001
