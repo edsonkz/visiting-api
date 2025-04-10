@@ -73,3 +73,6 @@ If your implementation does not use CSRF authentication, you should remove the `
 Set the `XDEBUG_SESSION` key at the request cookies.
 
 At your IDE, point the `app` project directory to the `/var/www/html` absolute path on server.
+
+## API routes Doc
+To see the avaliable routes of this API, import the file `insomnia_visits_api.yaml` on Insomnia.
